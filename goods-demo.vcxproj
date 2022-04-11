@@ -24,6 +24,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>goodsdemo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <ProjectName>orders-system</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -167,26 +168,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="address.h" />
     <ClInclude Include="application.h" />
-    <ClInclude Include="common.h" />
-    <ClInclude Include="database-guard.h" />
-    <ClInclude Include="database.h" />
+    <ClInclude Include="detail.h" />
     <ClInclude Include="order.h" />
+    <ClInclude Include="ordersDB.h" />
+    <ClInclude Include="database-guard.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="supplier.h" />
+    <ClInclude Include="person.h" />
+    <ClInclude Include="product.h" />
+    <ClInclude Include="rootObject.h" />
+    <ClInclude Include="setMember.h" />
+    <ClInclude Include="small_set.h" />
+    <ClInclude Include="zDate.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="address.cpp" />
     <ClCompile Include="application.cpp" />
-    <ClCompile Include="database.cpp" />
-    <ClCompile Include="goods-demo.cpp" />
+    <ClCompile Include="detail.cpp" />
     <ClCompile Include="order.cpp" />
+    <ClCompile Include="ordersDB.cpp" />
+    <ClCompile Include="goods-demo.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="supplier.cpp" />
+    <ClCompile Include="person.cpp" />
+    <ClCompile Include="product.cpp" />
+    <ClCompile Include="rootObject.cpp" />
+    <ClCompile Include="setMember.cpp" />
+    <ClCompile Include="small_set.cpp" />
+    <ClCompile Include="zDate.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

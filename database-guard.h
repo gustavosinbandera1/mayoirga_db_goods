@@ -9,9 +9,8 @@ public:
     task::initialize(task::normal_stack);
     m_opened = m_db.open(config_file.c_str());
   }
-
   ~database_guard() { m_db.close(); }
-
+  
   operator bool() const { return m_opened; }
 
 private:

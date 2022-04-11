@@ -1,24 +1,69 @@
 #pragma once
-#include "supplier.h"
 
-class Order :public object {
+#include "setMember.h"
+#include "small_set.h"
+#include "person.h"
+
+
+typedef enum _PaymentType {
+	CASH,
+	CREDIT_CARD,
+	CHECK
+}Payment_type;
+
+class Detail;
+class Order : public SetMember {
+protected:
+  int4 id;
+
 public:
-	ref<Supplier> supplier;
-	wstring_t item;
-	nat8 price;
-	nat8 delivery;
-	ref<set_member> supplier_orders;
-	ref<set_member> all_orders;
+  Order(char const *id, class_descriptor &desc = self_class);
+  inline int4 getId() const { return id; }
+  inline void setOwner(ref<Person> owner) { this->_owner = owner; };
+  inline void setShippingAddress(ref<Address> addr) { this->_shipping_address = addr; }
+  inline void setBillingAddress(ref<Address> addr) { this->_billing_address = addr; }
+  inline void setMainAddress(ref<Address> addr) { this->_main_address = addr; }
+  inline void setPaymentType(Payment_type type) { _payment_type = type; }
+  inline void setFirstLine(char const* first_line) {
+	  _first_line_description = String::create(first_line);
+  }
 
-	Order(ref<Supplier> oSupplier, wstring_t oItem, nat8 oPrice, nat8 oDelivery)
-		: object(self_class), supplier(oSupplier), item(oItem), price(oPrice), delivery(oDelivery)
-	{
-		char* itemName = item.getChars();
-		all_orders = set_member::create(this, itemName);
-		supplier_orders = set_member::create(this, itemName);
-		delete[] itemName;
-	}
+  inline void setSecondLine(char const* second_line) {
+	  _second_line_description = String::create(second_line);
+  }
 
-	METACLASS_DECLARATIONS(Order, object);
+
+  inline Payment_type getPaymentType() { return _payment_type; }
+  real4 getOrderPrice(long int id);
+  real4 getLineOrderPrice(char const* line_id);
+  inline ref<Address> getAddress() { return this->_shipping_address; }
+  inline ref<Person> getOwner() { return this->_owner; }
+  inline boolean commited() { return _commited; }
+
+
+  boolean addDetail(ref<Detail> detail);
+  inline void commitOrder(void) { _commited = True; }
+
+  void print(void const *arg = NULL) const;
+  void printBrief() const;
+  void printDetails() const;
+  boolean select(void const *pattern) const;
+
+
+
+
+  METACLASS_DECLARATIONS(Order, SetMember);
+
+private:
+  boolean _commited = False;
+  small_set<Detail> _set_order_details;
+  ref<Person> _owner;
+  ref<Address> _shipping_address;
+  ref<Address> _billing_address;
+  ref<Address> _main_address;
+  ref<String> _first_line_description;
+  ref<String> _second_line_description;
+  
+  Payment_type _payment_type;
 };
 
