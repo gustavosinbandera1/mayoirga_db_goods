@@ -6,7 +6,7 @@
   "C:\\Users\\gusta\\Documents\\server-config-dbs\\orders-config.cfg"
 
 char buf[6][256];
-
+//----------------------------------------------------
 static void input(const char *prompt, char *buf, size_t buf_size) {
   char *p;
   do {
@@ -21,7 +21,7 @@ static void input(const char *prompt, char *buf, size_t buf_size) {
     *--p = '\0';
   }
 }
-
+//----------------------------------------------------
 Application::Application() {
   actions.emplace("A", [this](void) { this->addPerson(); });
   actions.emplace("B", [this](void) { this->printAllPerson(); });
@@ -37,8 +37,9 @@ Application::Application() {
   actions.emplace("Q", [this](void) { this->quit(); });
   actions.emplace("Z", [this](void) { this->populateData(); });
 }
-
+//----------------------------------------------------
 void Application::addDemoPeople() {
+  //-------- Person-1 
   strcpy(buf[0], "gustavo");
   strcpy(buf[1], "gustavo@gmail.com");
   strcpy(buf[2], "1234");
@@ -50,7 +51,8 @@ void Application::addDemoPeople() {
   modify(p1)->setAddress("Armenia-3", "Quindio-3", "Colombia-3",
                          "universal calle 24-3", "BILLING_ADDRESS");
   modify(root)->addPerson(buf[1], p1);
-
+  
+  //-------- Person-2
   strcpy(buf[0], "nicolas");
   strcpy(buf[1], "nico@gmail.com");
   strcpy(buf[2], "abcd");
@@ -63,6 +65,7 @@ void Application::addDemoPeople() {
                          "universal calle 24-3", "BILLING_ADDRESS");
   modify(root)->addPerson(buf[1], p2);
 
+  //-------- Person-3
   strcpy(buf[0], "pedro");
   strcpy(buf[1], "pedro@gmail.com");
   strcpy(buf[2], "4321");
@@ -75,6 +78,7 @@ void Application::addDemoPeople() {
                          "universal calle 24-3", "BILLING_ADDRESS");
   modify(root)->addPerson(buf[1], p3);
 
+  //-------- Person-4
   strcpy(buf[0], "juan");
   strcpy(buf[1], "juan@gmail.com");
   strcpy(buf[2], "4321");
@@ -87,7 +91,7 @@ void Application::addDemoPeople() {
                          "universal calle 24-3", "BILLING_ADDRESS");
   modify(root)->addPerson(buf[1], p4);
 }
-
+//----------------------------------------------------
 void Application::addDemoProducts(void) {
   strcpy(buf[0], "Modem");  // description
   strcpy(buf[1], "1235.4"); // price
@@ -112,48 +116,59 @@ void Application::addDemoProducts(void) {
   modify(root)->addProduct(buf[0], std::stod(buf[1]),
                            std::stod(buf[2]));
 }
-
+//----------------------------------------------------
 void Application::addDemoOrders() {
-
-  modify(root)->addOrder(); // id auto generated
   ref<Person> person_1 = ordersDb->findPerson("gustavo@gmail.com");
   ref<Order> order_1 =  ordersDb->findOrder("1");
-  modify(order_1)->setOwner(person_1);
-  addDetail(order_1, "1", std::stod("3"));
-  addDetail(order_1, "2", std::stod("4"));
-  addDetail(order_1, "3", std::stod("4"));
+  if (order_1 == NULL) {
+	  modify(root)->addOrder();
+	  order_1 = ordersDb->findOrder("1");
+	  modify(order_1)->setOwner(person_1);
+	  addDetail(order_1, "1", std::stod("3"));
+	  addDetail(order_1, "2", std::stod("4"));
+	  addDetail(order_1, "3", std::stod("4"));
+  }
 
-  modify(root)->addOrder(); // id auto generated
   ref<Person> person_2 = ordersDb->findPerson("nico@gmail.com");
   ref<Order> order_2 = ordersDb->findOrder("2");
-  modify(order_2)->setOwner(person_2);
-  addDetail(order_2, "4", std::stod("2"));
-  addDetail(order_2, "5", std::stod("2"));
-  addDetail(order_2, "6", std::stod("2"));
+  if (order_2 == NULL) {
+    modify(root)->addOrder();
+    order_2 = ordersDb->findOrder("2");
+    modify(order_2)->setOwner(person_2);
+    addDetail(order_2, "4", std::stod("2"));
+    addDetail(order_2, "5", std::stod("2"));
+    addDetail(order_2, "6", std::stod("2"));
+  }
 
-  modify(root)->addOrder(); // id auto generated
   ref<Person> person_3 = ordersDb->findPerson("pedro@gmail.com");
   ref<Order> order_3 = ordersDb->findOrder("3");
-  modify(order_3)->setOwner(person_3);
-  addDetail(order_3, "5", std::stod("1"));
-  addDetail(order_3, "1", std::stod("4"));
-  addDetail(order_3, "2", std::stod("3"));
-}
+  if (order_3 == NULL) {
+	  modify(root)->addOrder();
+	  order_3 = ordersDb->findOrder("3");
+	  modify(order_3)->setOwner(person_2);
+	  addDetail(order_3, "1", std::stod("3"));
+	  addDetail(order_3, "2", std::stod("1"));
+	  addDetail(order_3, "3", std::stod("4"));
+  }
 
+}
+//----------------------------------------------------
 void Application::addPerson() {
   input("Name: ", buf[0], sizeof buf[0]);
   input("Email: ", buf[1], sizeof buf[1]);
   input("Password: ", buf[2], sizeof buf[2]);
   modify(root)->addPerson(buf[0], buf[1], buf[2]);
 }
-
-void Application::printAllPerson() const { ordersDb->printAllPersons(); }
-
+//----------------------------------------------------
+void Application::printAllPerson() const { 
+	ordersDb->printAllPersons(); 
+}
+//----------------------------------------------------
 void Application::deletePerson() {
   input("Name: ", buf[0], sizeof buf[0]);
   modify(root)->removePerson(buf[0]);
 }
-
+//----------------------------------------------------
 void Application::addProduct() {
   input("Description: ", buf[0], sizeof buf[0]);
   input("Price: ", buf[1], sizeof buf[1]);
@@ -161,18 +176,20 @@ void Application::addProduct() {
   modify(root)->addProduct(buf[0], std::stod(buf[1]),
                            std::stod(buf[2]));
 }
-
-void Application::printAllProduct() { ordersDb->printAllProducts(); }
-
+//----------------------------------------------------
+void Application::printAllProduct() { 
+	ordersDb->printAllProducts(); 
+}
+//----------------------------------------------------
 void Application::deleteProduct() {
   input("Sku: ", buf[0], sizeof buf[0]);
   modify(root)->removeProduct(buf[0]);
 }
-
+//----------------------------------------------------
 void Application::addOrder() {
   modify(root)->addOrder();
 }
-
+//----------------------------------------------------
 void Application::addDetail() {
   input("Product sku: ", buf[0], sizeof buf[0]);
   input("Quantity: ", buf[1], sizeof buf[1]);
@@ -193,7 +210,7 @@ void Application::addDetail() {
   modify(detail)->setOwner(order);
   insertDetail(buf[2], detail);
 }
-
+//----------------------------------------------------
 void Application::addDetail(char const* orderId, char const* productSku, int quantity) {
 	nat4 index;
 	ref<Order> order = ordersDb->findOrder(orderId);
@@ -215,7 +232,7 @@ void Application::addDetail(char const* orderId, char const* productSku, int qua
 	}
 	console::output("\nThere was an issue trying to add a new detail to order");
 }
-
+//----------------------------------------------------
 void Application::addDetail(ref<Order> order, char const* productSku, int quantity) {
 	nat4 index;
 	ref<Product> product = ordersDb->findProduct(productSku);
@@ -236,37 +253,39 @@ void Application::addDetail(ref<Order> order, char const* productSku, int quanti
 	}
 	console::output("\nThere was an issue trying to add a new detail to order");
 }
-
-void Application::printAllOrders() { ordersDb->printAllOrders(); }
-
+//----------------------------------------------------
+void Application::printAllOrders() { 
+	ordersDb->printAllOrders(); 
+}
+//----------------------------------------------------
 void Application::printOrderDetail() {
 }
+//----------------------------------------------------
+void Application::deleteOrderDetail() {
 
-void Application::deleteOrderDetail() {}
-
+}
+//----------------------------------------------------
 void Application::quit() {
   session_opened = false;
   cs.leave();
 }
-
+//----------------------------------------------------
 void Application::printOrder() {
   input("Order ID: ", buf[0], sizeof buf[0]);
   root->printOrder(buf[0]);
 }
+//----------------------------------------------------
+void Application::deleteOrder() {
 
-void Application::deleteOrder() {}
-
+}
+//----------------------------------------------------
 void Application::populateData() {
   /* sample data */
-  //--------------------- Adding Person objects -----------------------//
   addDemoPeople();
-  //-----------------Adding Product
-  //objects-------------------------------------//
   addDemoProducts();
-  //-----------------------Adding Order objects-------------------------
   addDemoOrders();
 }
-
+//----------------------------------------------------
 boolean Application::insertDetail(char const *orderID, ref<Detail> detail) {
   ref<Order> order = ordersDb->findOrder(orderID);
   if (order != NULL) {
@@ -276,7 +295,7 @@ boolean Application::insertDetail(char const *orderID, ref<Detail> detail) {
   console::output("Order no found");
   return False;
 }
-
+//----------------------------------------------------
 void Application::printMenu() {
 
   console::output("Number of persons are %d\n", ordersDb->personListSize());
@@ -297,11 +316,11 @@ void Application::printMenu() {
 	|(n)| Set Order Detail \n\
 	|(q)| Quit \n");
 }
-
+//----------------------------------------------------
 void task_proc Application::start_update_process(void *arg) {
   ((Application *)arg)->update();
 }
-
+//----------------------------------------------------
 void Application::dialogue() {
   task::create(start_update_process, this);
 
@@ -319,13 +338,13 @@ void Application::dialogue() {
     console::input(buf[0], sizeof buf[0]);
   }
 }
-
+//----------------------------------------------------
 void Application::update() {
   // thread for sending signals about  updates to others clients 
   while (session_opened) {
   }
 }
-
+//----------------------------------------------------
 int Application::main() {
   task::initialize(task::huge_stack);
 
@@ -345,7 +364,7 @@ int Application::main() {
     return EXIT_FAILURE;
   }
 }
-
+//----------------------------------------------------
 boolean Application::executeAction(std::string action) {
   auto it = actions.find(action);
   if (it != actions.end()) {
@@ -354,3 +373,4 @@ boolean Application::executeAction(std::string action) {
   }
   return false;
 }
+//----------------------------------------------------
