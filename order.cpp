@@ -24,12 +24,13 @@ void Order::print(void const *) const {
 	/*I am not sure about if thememory will need to be released 
 	when I did it I got an issue relate with using delete operator
 	*/
-	char* name = _owner->getName()->data();
-	char* email = _owner->getEmail()->data();
+	char* name = _owner->getName()->data(); //memory allocation possible memory leak I am not sure right now
+	char* email = _owner->getEmail()->data(); //memory allocation possible memory leak I am not sure right now 
 	console::output("\nOrder Id: %d  is commited: %d", id, _commited);
 	console::output("\nOwner Name: %s \nEmail: %s",name, email);
 	console::output("\nAddres... ");
 	_owner->getAddress()->print();
+	printDetails();
 	//delete email;
 	//delete name;
 }
@@ -39,7 +40,7 @@ void Order::printBrief() const {
 }
 
 void Order::printDetails() const {
-
+	_set_order_details.print();
 }
 
 boolean Order::select(void const* pattern) const {

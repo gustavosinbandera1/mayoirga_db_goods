@@ -15,11 +15,11 @@ void Detail::setOwner(ref<Order> order) {
 }
 
 void Detail::print(void const* arg) const {
-  console::output("Product sku: ");
-  _product_sku->print();
-  console::output("\n");
-  console::output("Quantity: %d", _quantity);
-  console::output("Price: %0.2lf", _product_price);
+  console::output("\nProduct sku: ");
+  print_sku();
+  console::output("\nQuantity: %d", _quantity);
+  console::output("\nProduct Price: %0.2lf", _product_price);
+  console::output("\nDetail Total %0.2f", _quantity*_product_price);
 }
 
 void Detail::print_sku() const { _product_sku->print(); }

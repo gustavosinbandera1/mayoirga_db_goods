@@ -115,6 +115,19 @@ void Application::addDemoProducts(void) {
   strcpy(buf[2], "2.32");    // weight
   modify(root)->addProduct(buf[0], std::stod(buf[1]),
                            std::stod(buf[2]));
+
+  strcpy(buf[0], "Car");    // description
+  strcpy(buf[1], "12000"); // price
+  strcpy(buf[2], "10.5"); // weight
+  modify(root)->addProduct(buf[0], std::stod(buf[1]),
+	  std::stod(buf[2]));
+
+  strcpy(buf[0], "Motor"); // description
+  strcpy(buf[1], "1600");  // price
+  strcpy(buf[2], "12.34");    // weight
+  modify(root)->addProduct(buf[0], std::stod(buf[1]),
+	  std::stod(buf[2]));
+
 }
 //----------------------------------------------------
 void Application::addDemoOrders() {
@@ -145,7 +158,7 @@ void Application::addDemoOrders() {
   if (order_3 == NULL) {
 	  modify(root)->addOrder();
 	  order_3 = ordersDb->findOrder("3");
-	  modify(order_3)->setOwner(person_2);
+	  modify(order_3)->setOwner(person_3);
 	  addDetail(order_3, "1", std::stod("3"));
 	  addDetail(order_3, "2", std::stod("1"));
 	  addDetail(order_3, "3", std::stod("4"));
