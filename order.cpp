@@ -12,18 +12,26 @@ Order::Order(char const* id, class_descriptor &desc) : SetMember(desc) {
 }
 
 
-boolean Order::addDetail(ref<Detail> detail) {
-	char* key = detail->getSku()->data();
-	console::output("sku del item detail es %s", key);
+boolean Order::addDetail(char const* key, ref<Detail> detail) {
+	//char* key = detail->getSku()->data();
+	console::output("sku item detail: %s", key);
 	_set_order_details.insertUnique(key, detail);
+	//delete key;
 	return boolean();
 }
 
 void Order::print(void const *) const {
+	/*I am not sure about if thememory will need to be released 
+	when I did it I got an issue relate with using delete operator
+	*/
+	char* name = _owner->getName()->data();
+	char* email = _owner->getEmail()->data();
 	console::output("\nOrder Id: %d  is commited: %d", id, _commited);
-	/*console::output("\nOwner Name: %s \nEmail: %s", _owner->getName()->data(), _owner->getEmail()->data());
-	console::output("\nAddres... ");*/
-	//_owner->getAddress()->print();
+	console::output("\nOwner Name: %s \nEmail: %s",name, email);
+	console::output("\nAddres... ");
+	_owner->getAddress()->print();
+	//delete email;
+	//delete name;
 }
 
 void Order::printBrief() const {

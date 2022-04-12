@@ -29,6 +29,8 @@ private:
 	void deleteOrder();
 
 	void addDetail();
+	void addDetail(char const* orderId, char const* productSku, int quantity);
+	void addDetail(ref<Order> order, char const* productSku, int quantity);
 	void printOrderDetail();
 	void deleteOrderDetail();
 
@@ -51,5 +53,5 @@ public:
 	int main();
 	Actions actions;
 	Application();
-	boolean executeAction(/*Actions actions, */std::string action);
+	boolean executeAction(std::string action);
 };

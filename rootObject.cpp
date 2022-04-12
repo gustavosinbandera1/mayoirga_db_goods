@@ -23,20 +23,34 @@ boolean RootObject::addPerson(const char *email, ref<Person> person) {
 	return modify(db)->addPerson(email, person);
 }
 //----------------------------------------------------------
-boolean RootObject::addProduct(const char* sku, const char* description,
+boolean RootObject::addProduct(const char* description,
 	double price, double weight) {
-	return modify(db)->addProduct(sku, description, price, weight);
+	return modify(db)->addProduct(description, price, weight);
 }
-boolean RootObject::addProduct(char const * sku, ref<Product> p) {
-	return modify(db)->addProduct(sku, p);
+boolean RootObject::addProduct(ref<Product> p) {
+	return modify(db)->addProduct(p);
 }
 //----------------------------------------------------------
 boolean RootObject::removeProduct(char const* sku) const {
 	return modify(db)->removeProduct(sku);
 }
+
+boolean RootObject::addDetail(ref<Detail> detail, ref<Order> order) {
+	return modify(db)->addDetail(detail, order);
+}
+
+boolean RootObject::removeDetail(ref<Detail> detail, ref<Order> order) {
+	return modify(db)->removeDetail(detail, order);
+}
+//-------------------------------------------------------
+void RootObject::printDetail(ref<Detail> d) {
+	if (d != NULL) {
+		d->print();
+	}
+}
 //----------------------------------------------------------
-boolean RootObject::addOrder(char const* order_id) {
-	return modify(db)->addOrder(order_id);
+boolean RootObject::addOrder() {
+	return modify(db)->addOrder();
 }
 //----------------------------------------------------------
 boolean RootObject::removeOrder(char const* order_id) {

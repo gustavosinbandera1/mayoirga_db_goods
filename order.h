@@ -41,7 +41,7 @@ public:
   inline boolean commited() { return _commited; }
 
 
-  boolean addDetail(ref<Detail> detail);
+  boolean addDetail(char const* key, ref<Detail> detail);
   inline void commitOrder(void) { _commited = True; }
 
   void print(void const *arg = NULL) const;
@@ -50,7 +50,7 @@ public:
   boolean select(void const *pattern) const;
 
 
-
+  small_set<Detail> getSetDetails() const { return _set_order_details; }
 
   METACLASS_DECLARATIONS(Order, SetMember);
 

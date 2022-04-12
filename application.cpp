@@ -89,163 +89,55 @@ void Application::addDemoPeople() {
 }
 
 void Application::addDemoProducts(void) {
-  strcpy(buf[0], "1");      // sku
-  strcpy(buf[1], "Modem");  // description
-  strcpy(buf[2], "1235.4"); // price
-  strcpy(buf[3], "32.1");   // weight
-  modify(root)->addProduct(buf[0], buf[1], std::stod(buf[2]),
-                           std::stod(buf[3]));
+  strcpy(buf[0], "Modem");  // description
+  strcpy(buf[1], "1235.4"); // price
+  strcpy(buf[2], "32.1");   // weight
+  modify(root)->addProduct(buf[0], std::stod(buf[1]),std::stod(buf[2]));
 
-  strcpy(buf[0], "2");        // sku
-  strcpy(buf[1], "Pc");       // description
-  strcpy(buf[2], "12435.23"); // price
-  strcpy(buf[3], "12.18");    // weight
-  modify(root)->addProduct(buf[0], buf[1], std::stod(buf[2]),
-                           std::stod(buf[3]));
+  strcpy(buf[0], "Pc");       // description
+  strcpy(buf[1], "12435.23"); // price
+  strcpy(buf[2], "12.18");    // weight
+  modify(root)->addProduct(buf[0], std::stod(buf[1]),
+                           std::stod(buf[2]));
 
-  strcpy(buf[0], "3");        // sku
-  strcpy(buf[1], "TV");       // description
-  strcpy(buf[2], "43267.22"); // price
-  strcpy(buf[3], "4.32");     // weight
-  modify(root)->addProduct(buf[0], buf[1], std::stod(buf[2]),
-                           std::stod(buf[3]));
+  strcpy(buf[0], "TV");       // description
+  strcpy(buf[1], "43267.22"); // price
+  strcpy(buf[2], "4.32");     // weight
+  modify(root)->addProduct(buf[0], std::stod(buf[1]),
+                           std::stod(buf[2]));
 
-  strcpy(buf[0], "4");       // sku
-  strcpy(buf[1], "Desktop"); // description
-  strcpy(buf[2], "2345.6");  // price
-  strcpy(buf[3], "2.32");    // weight
-  modify(root)->addProduct(buf[0], buf[1], std::stod(buf[2]),
-                           std::stod(buf[3]));
+  strcpy(buf[0], "Desktop"); // description
+  strcpy(buf[1], "2345.6");  // price
+  strcpy(buf[2], "2.32");    // weight
+  modify(root)->addProduct(buf[0], std::stod(buf[1]),
+                           std::stod(buf[2]));
 }
 
 void Application::addDemoOrders() {
-  strcpy(buf[0], "1");
-  strcpy(buf[1], "2");
-  strcpy(buf[2], "3");
-  strcpy(buf[3], "4");
 
-  modify(root)->addOrder(buf[0]);
-  modify(root)->addOrder(buf[1]);
-  modify(root)->addOrder(buf[2]);
-  modify(root)->addOrder(buf[3]);
+  modify(root)->addOrder(); // id auto generated
+  ref<Person> person_1 = ordersDb->findPerson("gustavo@gmail.com");
+  ref<Order> order_1 =  ordersDb->findOrder("1");
+  modify(order_1)->setOwner(person_1);
+  addDetail(order_1, "1", std::stod("3"));
+  addDetail(order_1, "2", std::stod("4"));
+  addDetail(order_1, "3", std::stod("4"));
 
-  //----------------- Adding Order's details to Order "1" and using User Gustavo
-  //as bill owner ----------------------//
-  ref<Order> order;
-  order = ordersDb->findOrder("1");
-  if (order != NULL) {
-    console::output("we get the order object .........");
-    ref<Detail> detail1 =
-        NEW Detail("1", "4", std::stod("3"), std::stod("765.09"));
-    ref<Detail> detail2 =
-        NEW Detail("2", "5", std::stod("3"), std::stod("546.6"));
-    ref<Detail> detail3 =
-        NEW Detail("3", "6", std::stod("3"), std::stod("321.32"));
-    modify(detail1)->setOwner(order);
-    modify(detail2)->setOwner(order);
-    modify(detail3)->setOwner(order);
+  modify(root)->addOrder(); // id auto generated
+  ref<Person> person_2 = ordersDb->findPerson("nico@gmail.com");
+  ref<Order> order_2 = ordersDb->findOrder("2");
+  modify(order_2)->setOwner(person_2);
+  addDetail(order_2, "4", std::stod("2"));
+  addDetail(order_2, "5", std::stod("2"));
+  addDetail(order_2, "6", std::stod("2"));
 
-    modify(order)->addDetail(detail1);
-    modify(order)->addDetail(detail2);
-    modify(order)->addDetail(detail3);
-
-    ref<Person> p = ordersDb->findPerson("gustavo@gmail.com");
-    if (p != NULL) {
-      console::output("\nAdding adrdesses to the bill order ....");
-      modify(order)->setOwner(p);
-      modify(order)->setBillingAddress(p->getAddress("BILLING_ADDRESS"));
-      modify(order)->setShippingAddress(p->getAddress("SHIPPING_ADDRESS"));
-    } else {
-      console::output("\nUser doesn't exist");
-    }
-  }
-
-  //----------------- Adding Order's details to Order "2" and using User Nicolas
-  //as bill owner ----------------------//
-  order = ordersDb->findOrder("2");
-  if (order != NULL) {
-    console::output("we get the order object .........");
-    ref<Detail> detail1 =
-        NEW Detail("1", "4", std::stod("3"), std::stod("765.09"));
-    ref<Detail> detail2 =
-        NEW Detail("2", "5", std::stod("3"), std::stod("546.6"));
-    ref<Detail> detail3 =
-        NEW Detail("3", "6", std::stod("3"), std::stod("321.32"));
-    modify(detail1)->setOwner(order);
-    modify(detail2)->setOwner(order);
-    modify(detail3)->setOwner(order);
-
-    modify(order)->addDetail(detail1);
-    modify(order)->addDetail(detail2);
-    modify(order)->addDetail(detail3);
-    ref<Person> p = ordersDb->findPerson("nico@gmail.com");
-    if (p != NULL) {
-      console::output("\nAdding adrdesses to the bill order ....");
-      modify(order)->setOwner(p);
-      modify(order)->setBillingAddress(p->getAddress("BILLING_ADDRESS"));
-      modify(order)->setShippingAddress(p->getAddress("SHIPPING_ADDRESS"));
-    } else {
-      console::output("\nUser doesn't exist");
-    }
-  }
-
-  //----------------- Adding Order's details to Order "3" and using User Pedro
-  //as bill owner ----------------------//
-  order = ordersDb->findOrder("3");
-  if (order != NULL) {
-    console::output("we get the order object .........");
-    ref<Detail> detail1 =
-        NEW Detail("1", "4", std::stod("3"), std::stod("765.09"));
-    ref<Detail> detail2 =
-        NEW Detail("2", "5", std::stod("3"), std::stod("546.6"));
-    ref<Detail> detail3 =
-        NEW Detail("3", "6", std::stod("3"), std::stod("321.32"));
-    modify(detail1)->setOwner(order);
-    modify(detail2)->setOwner(order);
-    modify(detail3)->setOwner(order);
-
-    modify(order)->addDetail(detail1);
-    modify(order)->addDetail(detail2);
-    modify(order)->addDetail(detail3);
-    ref<Person> p = ordersDb->findPerson("pedro@gmail.com");
-    if (p != NULL) {
-      console::output("\nAdding adrdesses to the bill order ....");
-      modify(order)->setOwner(p);
-      modify(order)->setBillingAddress(p->getAddress("BILLING_ADDRESS"));
-      modify(order)->setShippingAddress(p->getAddress("SHIPPING_ADDRESS"));
-    } else {
-      console::output("\nUser doesn't exist");
-    }
-  }
-
-  //----------------- Adding Order's details to Order "3" and using User Pedro
-  //as bill owner ----------------------//
-  order = ordersDb->findOrder("4");
-  if (order != NULL) {
-    console::output("we get the order object .........");
-    ref<Detail> detail1 =
-        NEW Detail("1", "4", std::stod("3"), std::stod("765.09"));
-    ref<Detail> detail2 =
-        NEW Detail("2", "5", std::stod("3"), std::stod("546.6"));
-    ref<Detail> detail3 =
-        NEW Detail("3", "6", std::stod("3"), std::stod("321.32"));
-    modify(detail1)->setOwner(order);
-    modify(detail2)->setOwner(order);
-    modify(detail3)->setOwner(order);
-
-    modify(order)->addDetail(detail1);
-    modify(order)->addDetail(detail2);
-    modify(order)->addDetail(detail3);
-    ref<Person> p = ordersDb->findPerson("juan@gmail.com");
-    if (p != NULL) {
-      console::output("\nAdding adrdesses to the bill order ....");
-      modify(order)->setOwner(p);
-      modify(order)->setBillingAddress(p->getAddress("BILLING_ADDRESS"));
-      modify(order)->setShippingAddress(p->getAddress("SHIPPING_ADDRESS"));
-    } else {
-      console::output("\nUser doesn't exist");
-    }
-  }
+  modify(root)->addOrder(); // id auto generated
+  ref<Person> person_3 = ordersDb->findPerson("pedro@gmail.com");
+  ref<Order> order_3 = ordersDb->findOrder("3");
+  modify(order_3)->setOwner(person_3);
+  addDetail(order_3, "5", std::stod("1"));
+  addDetail(order_3, "1", std::stod("4"));
+  addDetail(order_3, "2", std::stod("3"));
 }
 
 void Application::addPerson() {
@@ -263,13 +155,11 @@ void Application::deletePerson() {
 }
 
 void Application::addProduct() {
-  input("New product sku: ", buf[0], sizeof buf[0]);
-  input("Description: ", buf[1], sizeof buf[1]);
-  input("Price: ", buf[2], sizeof buf[2]);
-  input("Weight: ", buf[3], sizeof buf[3]);
-  console::output("int output: %0.2lf", std::stod(buf[2]));
-  modify(root)->addProduct(buf[0], buf[1], std::stod(buf[2]),
-                           std::stod(buf[3]));
+  input("Description: ", buf[0], sizeof buf[0]);
+  input("Price: ", buf[1], sizeof buf[1]);
+  input("Weight: ", buf[2], sizeof buf[2]);
+  modify(root)->addProduct(buf[0], std::stod(buf[1]),
+                           std::stod(buf[2]));
 }
 
 void Application::printAllProduct() { ordersDb->printAllProducts(); }
@@ -280,25 +170,77 @@ void Application::deleteProduct() {
 }
 
 void Application::addOrder() {
-  input("OrderId: ", buf[0],
-        sizeof buf[0]); // then create order id object and insert details items
-  modify(root)->addOrder(buf[0]);
+  modify(root)->addOrder();
 }
 
 void Application::addDetail() {
-  input("detail ID: ", buf[0], sizeof buf[0]);
-  input("Product sku: ", buf[1], sizeof buf[1]);
-  input("Quantity: ", buf[2], sizeof buf[2]);
-  input("Price: ", buf[3], sizeof buf[3]);
-  input("Order ID: ", buf[4], sizeof buf[4]);
-  ref<Detail> detail =
-      NEW Detail(buf[0], buf[1], std::stod(buf[2]), std::stod(buf[3]));
-  insertDetail(buf[4], detail);
+  input("Product sku: ", buf[0], sizeof buf[0]);
+  input("Quantity: ", buf[1], sizeof buf[1]);
+  input("Order ID: ", buf[2], sizeof buf[2]);
+  
+  ref<Product> p = ordersDb->findProduct(buf[0]);
+  if (p == NULL) return;
+
+  real4 tmpPrice =  p->getPrice();
+  console::output("\nthe price on table %0.2f", tmpPrice);
+ 
+  ref<Order> order = ordersDb->findOrder(buf[2]);
+  if (order == NULL) return;
+  
+  int4 index = ordersDb->getLastDetailIndex(order) + 1;
+  ref<Detail> detail = NEW Detail(numberToString(index).c_str(), buf[0], std::stod(buf[1]));
+  modify(detail)->setPrice(p->getPrice()*std::stod(buf[1]));
+  modify(detail)->setOwner(order);
+  insertDetail(buf[2], detail);
+}
+
+void Application::addDetail(char const* orderId, char const* productSku, int quantity) {
+	nat4 index;
+	ref<Order> order = ordersDb->findOrder(orderId);
+	ref<Product> product = ordersDb->findProduct(productSku);
+
+	if (order != NULL) {
+		index = ordersDb->getLastDetailIndex(order) + 1;
+		console::output("\nwe get the order object .........");
+		ref<Detail> detail = NEW Detail(numberToString(index).c_str(), productSku, quantity);
+		modify(detail)->setOwner(order);
+		if (product != NULL) {
+			modify(detail)->setPrice(product->getPrice());
+			modify(order)->addDetail(productSku,detail);
+			console::output("\nDetail added ...");
+			return;
+		}
+		console::output("\nNo product found ..");
+		return;
+	}
+	console::output("\nThere was an issue trying to add a new detail to order");
+}
+
+void Application::addDetail(ref<Order> order, char const* productSku, int quantity) {
+	nat4 index;
+	ref<Product> product = ordersDb->findProduct(productSku);
+
+	if (order != NULL) {
+		index = ordersDb->getLastDetailIndex(order) + 1;
+		console::output("\nwe get the order object .........");
+		ref<Detail> detail = NEW Detail(numberToString(index).c_str(), productSku, quantity);
+		modify(detail)->setOwner(order);
+		if (product != NULL) {
+			modify(detail)->setPrice(product->getPrice());
+			modify(order)->addDetail(productSku, detail);
+			console::output("\nDetail added ...");
+			return;
+		}
+		console::output("\nNo product found ..");
+		return;
+	}
+	console::output("\nThere was an issue trying to add a new detail to order");
 }
 
 void Application::printAllOrders() { ordersDb->printAllOrders(); }
 
-void Application::printOrderDetail() {}
+void Application::printOrderDetail() {
+}
 
 void Application::deleteOrderDetail() {}
 
@@ -328,7 +270,7 @@ void Application::populateData() {
 boolean Application::insertDetail(char const *orderID, ref<Detail> detail) {
   ref<Order> order = ordersDb->findOrder(orderID);
   if (order != NULL) {
-    modify(order)->addDetail(detail);
+    modify(order)->addDetail(detail->getSku()->get_text(), detail);
     return True;
   }
   console::output("Order no found");

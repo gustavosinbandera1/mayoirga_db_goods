@@ -1,20 +1,10 @@
 #pragma once
-//
-//template <typename T>
-//std::string numberToString(T Number) {
-//	std::ostringstream ss;
-//	ss << Number;
-//	return ss.str();
-//}
+
 
 class SetMember : public object {
 public:
   virtual void print(void const *) const;
   virtual boolean select(void const *) const;
-
-  //int4 id;  // unique
-
-  //virtual int4 getId() const { return this->id; }
 
   struct select_args {
     void const *condition;

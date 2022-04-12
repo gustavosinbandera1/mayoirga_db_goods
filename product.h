@@ -3,12 +3,13 @@
 
 class Product : public SetMember {
 public:
-  inline nat8 getPrice(void) { return nPrice; };
-  inline nat8 getWeight(void) { return nWeight; };
-  inline ref<String> getDescription(void) { return sDescription; };
-  inline ref<String> getSku() { return sSku; }
-  inline void setPrice(double  price) { nPrice = price; }
-  inline void setWeight(double weight) { nWeight = weight; }
+  inline int4 getId() const { return _iSku; }
+  inline real4 getPrice(void) const { return _nPrice; };
+  inline real4 getWeight(void) const { return _nWeight; };
+  inline ref<String> getDescription(void) const { return _sDescription; };
+  inline int4 getSku() const { return _iSku; }
+  inline void setPrice(double  price) { _nPrice = price; }
+  inline void setWeight(double weight) { _nWeight = weight; }
   
   struct selectPattern {
     char const *sSku;
@@ -22,8 +23,10 @@ public:
           double weight);
 
 private:
-  ref<String> sSku;
-  ref<String> sDescription;
-  real4 nPrice;
-  real4 nWeight;
+
+  //ref<String> 
+  int4 _iSku;
+  ref<String> _sDescription;
+  real4 _nPrice;
+  real4 _nWeight;
 };

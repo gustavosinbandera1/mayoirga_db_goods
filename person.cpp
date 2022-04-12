@@ -30,8 +30,7 @@ boolean Person::select(void const *pattern) const {
 }
 
 void Person::setAddress(char const* city, char const* state,
-	char const* country,
-	char const* streetNumber, char const* type) {
+	char const* country,char const* streetNumber, char const* type) {
 	ref<Address> tmpAddress = NEW Address(city,state, country, streetNumber, type );
 	_set_all_user_addresses.insertUnique(type, tmpAddress);
 }

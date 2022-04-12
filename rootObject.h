@@ -13,15 +13,18 @@ public:
 	boolean addPerson(const char *name, ref<Person> person);
 	boolean removePerson(char const* name) const;
 
-	boolean addOrder(char const* order_id);
+	boolean addOrder();
 	boolean removeOrder(char const* order_id);
 	void printOrder(char const* id) const ;
 
 
-	boolean addProduct(const char* sku, const char* description, 
-		double price, double weight);
-	boolean addProduct(char const* sku, ref<Product> p);
+	boolean addProduct(const char* description, double price, double weight);
+	boolean addProduct(ref<Product> p);
 	boolean removeProduct(char const* sku) const;
+
+	boolean addDetail(ref<Detail> detail, ref<Order> order);
+	boolean removeDetail(ref<Detail> detail, ref<Order> order);
+	void printDetail(ref<Detail> d);
 
 	METACLASS_DECLARATIONS(RootObject, object);
 };

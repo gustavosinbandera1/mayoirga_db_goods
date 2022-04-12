@@ -40,9 +40,10 @@ int4 OrdersDB::getLastPersonIndex() const {
 }
 
 int4 OrdersDB::getLastProductIndex() const {
-	//ref<Product>  p = _set_all_products.members->last->obj;
-	//console::output("last Product index %d ", p->getId());
-	//return p->getId();
+	if (_set_all_products.members->last != NULL) {
+		ref<Product>  p = _set_all_products.members->last->obj;
+		if (p != NULL) return p->getId();
+	}
 	return 0;
 }
 
@@ -54,13 +55,19 @@ boolean OrdersDB::removeProduct(char const * sku) const {
 	return _set_all_products.erase(sku) != NULL ? True : False;
 }
 
-boolean OrdersDB::addProduct(const char * sku, const char * description, double price, double weight){
-	ref<Product> p = NEW Product(sku, description, price, weight);
-	return _set_all_products.insertUnique(sku, p);
+boolean OrdersDB::addProduct(const char * description, double price, double weight){
+	int4 productIndex = getLastProductIndex() + 1;
+	std::string sku = numberToString(productIndex);
+	console::output("getting product index %s ", sku.c_str());
+	ref<Product> p = NEW Product(sku.c_str(), description, price, weight);
+	return _set_all_products.insertUnique(sku.c_str(), p);
 }
 
-boolean OrdersDB::addProduct(char const * sku, ref<Product> p) {
-	return _set_all_products.insertUnique(sku, p);
+boolean OrdersDB::addProduct(ref<Product> p) {
+	int4 productIndex = getLastProductIndex() + 1;
+	std::string sku = numberToString(productIndex);
+	console::output("getting product index %s ", sku.c_str());
+	return _set_all_products.insertUnique(sku.c_str(), p);
 }
 
 size_t OrdersDB::productListSize(void) const {
@@ -84,20 +91,21 @@ boolean OrdersDB::removeOrder(char const * orderID) const {
 	return _set_all_orders.erase(orderID) != NULL ? True : False;
 }
 
-boolean OrdersDB::addOrder(char const * orderID) {
+boolean OrdersDB::addOrder() {
 	int4 orderIndex = getLastOrderIndex() + 1;
+	console::output("Order index .......... %d ", orderIndex);
 	std::string sOrderID = numberToString(orderIndex);
 	console::output("getting order index %s", sOrderID.c_str());
 	ref<Order> order = NEW Order(sOrderID.c_str());
 	return _set_all_orders.insertUnique(sOrderID.c_str(), order);
 }
 
-boolean OrdersDB::addOrder(char const * ordID, ref<Order> o) {
+boolean OrdersDB::addOrder(ref<Order> o) {
 	int4 orderIndex = getLastOrderIndex() + 1;
+	console::output("Order index .......... %d ", orderIndex);
 	std::string sOrderID = numberToString(orderIndex);
 	console::output("getting order index %s", sOrderID.c_str());
 	return _set_all_orders.insertUnique(sOrderID.c_str(), o);
-	return False;
 }
 
 size_t OrdersDB::orderListSize(void) const {
@@ -115,8 +123,11 @@ void OrdersDB::printAllOrders(void) const {
 }
 
 int4 OrdersDB::getLastOrderIndex() const {
-	ref<Order>  o = _set_all_orders.members->last->obj;
-	if(o != NULL) return o->getId();
+	console::output("Testing here.........");
+	if (_set_all_orders.members->last != NULL) {
+		ref<Order>  o = _set_all_orders.members->last->obj;
+		if (o != NULL) return o->getId();
+	}
 	return 0;
 }
 
@@ -142,6 +153,28 @@ boolean OrdersDB::addAddress(char const * email, ref<Address> address) {
 		modify(p)->setAddress(email, address);
 		return True;
 	}
+	return False;
+}
+
+int4 OrdersDB::getLastDetailIndex(ref<Order> order) const {
+	if (order->getSetDetails().members->last != NULL) {
+		ref<Detail> d = order->getSetDetails().members->last->obj;
+		if (d != NULL) return d->getId();
+	}
+	return 0;;
+}
+
+boolean OrdersDB::addDetail(ref<Detail> newDetail, ref<Order> order) {
+	int4 detailIndex = getLastDetailIndex(order) + 1;
+	console::output("Detail index %d", detailIndex);
+	std::string sDetailId = numberToString(detailIndex);
+	console::output("getting detail index %s ", sDetailId.c_str());
+	return modify(order)->getSetDetails().insertUnique(sDetailId.c_str(), newDetail);
+}
+
+boolean OrdersDB::removeDetail(ref<Detail> detail, ref<Order> order) {
+	ref<Detail> d =  modify(order)->getSetDetails().erase(numberToString(detail->getId()).c_str());
+	if (d != NULL) return True;
 	return False;
 }
 
