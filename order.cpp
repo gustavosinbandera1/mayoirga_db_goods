@@ -13,11 +13,12 @@ Order::Order(char const* id, class_descriptor &desc) : SetMember(desc) {
 
 
 boolean Order::addDetail(char const* key, ref<Detail> detail) {
-	//char* key = detail->getSku()->data();
 	console::output("sku item detail: %s", key);
-	_set_order_details.insertUnique(key, detail);
-	//delete key;
-	return boolean();
+	return _set_order_details.insertUnique(key, detail);
+}
+
+boolean Order::removeDetail(char const * key) {
+	return _set_order_details.erase(key) != NULL ?  True : False;
 }
 
 void Order::print(void const *) const {

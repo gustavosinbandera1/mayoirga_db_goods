@@ -42,6 +42,7 @@ public:
 
 
   boolean addDetail(char const* key, ref<Detail> detail);
+  boolean removeDetail(char const* key);
   inline void commitOrder(void) { _commited = True; }
 
   void print(void const *arg = NULL) const;

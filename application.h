@@ -31,9 +31,8 @@ private:
 	void addDetail();
 	void addDetail(char const* orderId, char const* productSku, int quantity);
 	void addDetail(ref<Order> order, char const* productSku, int quantity);
-	void printOrderDetail();
-	void deleteOrderDetail();
-
+	void deleteDetail(char const* orderId, char const* detailId);
+	void deleteDetail();
 	void quit();
 
 protected:

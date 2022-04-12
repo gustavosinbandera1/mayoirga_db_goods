@@ -34,6 +34,7 @@ Application::Application() {
   actions.emplace("I", [this](void) { this->printOrder(); });
   actions.emplace("J", [this](void) { this->printAllOrders(); });
   actions.emplace("N", [this](void) { this->addDetail(); });
+  actions.emplace("O", [this](void) { this->deleteDetail(); });
   actions.emplace("Q", [this](void) { this->quit(); });
   actions.emplace("Z", [this](void) { this->populateData(); });
 }
@@ -228,7 +229,6 @@ void Application::addDetail(char const* orderId, char const* productSku, int qua
 	nat4 index;
 	ref<Order> order = ordersDb->findOrder(orderId);
 	ref<Product> product = ordersDb->findProduct(productSku);
-
 	if (order != NULL) {
 		index = ordersDb->getLastDetailIndex(order) + 1;
 		console::output("\nwe get the order object .........");
@@ -247,12 +247,9 @@ void Application::addDetail(char const* orderId, char const* productSku, int qua
 }
 //----------------------------------------------------
 void Application::addDetail(ref<Order> order, char const* productSku, int quantity) {
-	nat4 index;
 	ref<Product> product = ordersDb->findProduct(productSku);
-
 	if (order != NULL) {
-		index = ordersDb->getLastDetailIndex(order) + 1;
-		console::output("\nwe get the order object .........");
+		nat4 index = ordersDb->getLastDetailIndex(order) + 1;
 		ref<Detail> detail = NEW Detail(numberToString(index).c_str(), productSku, quantity);
 		modify(detail)->setOwner(order);
 		if (product != NULL) {
@@ -271,11 +268,17 @@ void Application::printAllOrders() {
 	ordersDb->printAllOrders(); 
 }
 //----------------------------------------------------
-void Application::printOrderDetail() {
+void Application::deleteDetail(char const * orderId, char const * detailId) {
+	ref<Order> order = ordersDb->findOrder(orderId);
+	if (order != NULL) {
+		modify(order)->removeDetail(detailId);
+	}
 }
 //----------------------------------------------------
-void Application::deleteOrderDetail() {
-
+void Application::deleteDetail() {
+	input("Order ID: ", buf[0], sizeof buf[0]);
+	input("Detail ID: ", buf[1], sizeof buf[1]);
+	deleteDetail(buf[0], buf[1]);
 }
 //----------------------------------------------------
 void Application::quit() {
@@ -289,7 +292,8 @@ void Application::printOrder() {
 }
 //----------------------------------------------------
 void Application::deleteOrder() {
-
+	input("Order ID: ", buf[0], sizeof buf[0]);
+	modify(root)->removeOrder(buf[0]);
 }
 //----------------------------------------------------
 void Application::populateData() {
@@ -327,6 +331,7 @@ void Application::printMenu() {
 	|(l)| Set order billing address \n\
 	|(m)| Set Order Owner \n\
 	|(n)| Set Order Detail \n\
+	|(o)| Delete Detail \n\
 	|(q)| Quit \n");
 }
 //----------------------------------------------------
